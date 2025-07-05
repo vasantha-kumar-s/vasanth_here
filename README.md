@@ -147,4 +147,5 @@ Feel free to fork this project and customize it for your own portfolio. If you f
 
 ---
 
+<!-- Trigger GitHub Pages deployment -->
 **Built with ❤️ using HTML, CSS, and JavaScript**
