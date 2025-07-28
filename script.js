@@ -90,8 +90,8 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Typing effect for hero title (optional enhancement)
-function typeWriter(element, text, speed = 100) {
+// Typing effect for hero title
+function typeWriter(element, text, speed = 80) {
     let i = 0;
     element.innerHTML = '';
     
@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroTitle = document.querySelector('.hero-title');
     const originalText = heroTitle.textContent;
     
-    // Add a small delay before starting the typing effect
     setTimeout(() => {
         typeWriter(heroTitle, originalText, 80);
     }, 500);
@@ -125,9 +124,8 @@ function scrollToTop() {
     });
 }
 
-// Add scroll to top button (optional)
+// Add scroll to top button
 document.addEventListener('DOMContentLoaded', () => {
-    // Create scroll to top button
     const scrollTopBtn = document.createElement('button');
     scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
     scrollTopBtn.className = 'scroll-top-btn';
@@ -174,32 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Form validation and contact functionality (if needed in future)
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
-// Lazy loading for images (if images are added later)
-function lazyLoadImages() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-
-    images.forEach(img => imageObserver.observe(img));
-}
-
-// Initialize lazy loading when DOM is loaded
-document.addEventListener('DOMContentLoaded', lazyLoadImages);
-
 // Performance optimization: Debounce scroll events
 function debounce(func, wait) {
     let timeout;
@@ -215,12 +187,18 @@ function debounce(func, wait) {
 
 // Apply debouncing to scroll events for better performance
 const debouncedScrollHandler = debounce(() => {
-    // Any scroll-based functionality can be added here
+    // Navbar background on scroll
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+    }
 }, 10);
 
 window.addEventListener('scroll', debouncedScrollHandler);
 
-// Preloader (optional)
+// Preloader functionality
 window.addEventListener('load', () => {
     const preloader = document.querySelector('.preloader');
     if (preloader) {
@@ -230,13 +208,3 @@ window.addEventListener('load', () => {
         }, 300);
     }
 });
-
-// Console message for developers
-console.log(`
-🚀 Portfolio Website by Vasantha Kumar S
-📧 Contact: vasanthakumarselvaraj04@gmail.com
-🔗 GitHub: https://github.com/vasantha-kumar-s
-💼 LinkedIn: https://www.linkedin.com/in/vasantha-kumar-s/
-
-Built with ❤️ using HTML, CSS, and JavaScript
-`);
