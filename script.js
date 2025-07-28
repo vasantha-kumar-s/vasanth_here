@@ -84,9 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.background = 'rgba(15, 23, 42, 0.98)';
     } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.background = 'rgba(15, 23, 42, 0.95)';
     }
 });
 
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
         color: white;
         border: none;
         cursor: pointer;
