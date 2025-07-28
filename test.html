@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass { background-color: #d4edda; color: #155724; }
+        .fail { background-color: #f8d7da; color: #721c24; }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Portfolio Dark Mode Test Suite</h1>
+        <button onclick="runTests()">Run Tests</button>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        function runTests() {
+            const results = [];
+            const resultsContainer = document.getElementById('test-results');
+            
+            // Test 1: Check if CSS variables are defined
+            const rootStyles = getComputedStyle(document.documentElement);
+            const bgPrimary = rootStyles.getPropertyValue('--bg-primary');
+            results.push({
+                name: 'CSS Variables Defined',
+                passed: bgPrimary !== '',
+                message: bgPrimary ? `Found CSS variable: ${bgPrimary}` : 'CSS variables not found'
+            });
+            
+            // Test 2: Check if dark mode theme can be applied
+            document.body.setAttribute('data-theme', 'dark');
+            const darkBgPrimary = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
+            results.push({
+                name: 'Dark Theme Application',
+                passed: darkBgPrimary !== bgPrimary,
+                message: darkBgPrimary !== bgPrimary ? 'Dark theme colors applied successfully' : 'Dark theme not properly configured'
+            });
+            
+            // Test 3: Check localStorage functionality
+            try {
+                localStorage.setItem('theme-test', 'dark');
+                const stored = localStorage.getItem('theme-test');
+                localStorage.removeItem('theme-test');
+                results.push({
+                    name: 'LocalStorage Functionality',
+                    passed: stored === 'dark',
+                    message: stored === 'dark' ? 'LocalStorage working correctly' : 'LocalStorage not functioning'
+                });
+            } catch (e) {
+                results.push({
+                    name: 'LocalStorage Functionality',
+                    passed: false,
+                    message: 'LocalStorage not available: ' + e.message
+                });
+            }
+            
+            // Test 4: Check if prefers-color-scheme is supported
+            const supportsColorScheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches !== undefined;
+            results.push({
+                name: 'System Theme Detection',
+                passed: supportsColorScheme,
+                message: supportsColorScheme ? 'System theme detection supported' : 'System theme detection not supported'
+            });
+            
+            // Test 5: Check accessibility (color contrast simulation)
+            const testColors = [
+                { bg: '#0f172a', text: '#f8fafc', name: 'Dark Mode Text Contrast' },
+                { bg: '#ffffff', text: '#1e293b', name: 'Light Mode Text Contrast' }
+            ];
+            
+            testColors.forEach(color => {
+                // Simple contrast ratio calculation (simplified)
+                const contrastRatio = calculateContrastRatio(color.bg, color.text);
+                results.push({
+                    name: color.name,
+                    passed: contrastRatio >= 4.5,
+                    message: `Contrast ratio: ${contrastRatio.toFixed(2)} ${contrastRatio >= 4.5 ? '(WCAG AA compliant)' : '(Below WCAG AA standard)'}`
+                });
+            });
+            
+            // Display results
+            resultsContainer.innerHTML = results.map(result => 
+                `<div class="test-result ${result.passed ? 'pass' : 'fail'}">
+                    <strong>${result.name}:</strong> ${result.passed ? 'PASS' : 'FAIL'} - ${result.message}
+                </div>`
+            ).join('');
+            
+            // Reset theme
+            document.body.removeAttribute('data-theme');
+        }
+        
+        function calculateContrastRatio(bg, text) {
+            // Simplified contrast calculation for demo purposes
+            const getBrightness = (hex) => {
+                const rgb = hexToRgb(hex);
+                return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+            };
+            
+            const bgBrightness = getBrightness(bg);
+            const textBrightness = getBrightness(text);
+            
+            const lighter = Math.max(bgBrightness, textBrightness);
+            const darker = Math.min(bgBrightness, textBrightness);
+            
+            return (lighter + 0.05) / (darker + 0.05);
+        }
+        
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+    </script>
+</body>
+</html>

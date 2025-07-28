@@ -16,6 +16,61 @@ navLinks.forEach(link => {
     });
 });
 
+// Dark Mode Toggle
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const body = document.body;
+
+// Check for saved theme preference or default to 'light'
+const currentTheme = localStorage.getItem('theme') || 'light';
+body.setAttribute('data-theme', currentTheme);
+
+// Update icon based on current theme
+function updateThemeIcon(theme) {
+    if (theme === 'dark') {
+        themeIcon.className = 'fas fa-sun';
+    } else {
+        themeIcon.className = 'fas fa-moon';
+    }
+}
+
+// Initialize icon
+updateThemeIcon(currentTheme);
+
+// Theme toggle functionality
+themeToggle.addEventListener('click', () => {
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+    
+    // Add smooth transition for theme change
+    body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    setTimeout(() => {
+        body.style.transition = '';
+    }, 300);
+});
+
+// Respect system preference if no saved preference
+if (!localStorage.getItem('theme')) {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark.matches) {
+        body.setAttribute('data-theme', 'dark');
+        updateThemeIcon('dark');
+    }
+    
+    // Listen for system theme changes
+    prefersDark.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+    });
+}
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -84,9 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.backdropFilter = 'blur(20px)';
+        navbar.style.boxShadow = '0 2px 20px var(--shadow-medium)';
     } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.backdropFilter = 'blur(20px)';
+        navbar.style.boxShadow = '0 2px 20px var(--shadow-light)';
     }
 });
 
@@ -131,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollTopBtn = document.createElement('button');
     scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
     scrollTopBtn.className = 'scroll-top-btn';
+    scrollTopBtn.setAttribute('aria-label', 'Scroll to top');
     scrollTopBtn.style.cssText = `
         position: fixed;
         bottom: 30px;
@@ -138,16 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
         color: white;
         border: none;
         cursor: pointer;
         font-size: 18px;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.3s ease;
+        transition: var(--transition);
         z-index: 1000;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shadow-elevation);
     `;
     
     scrollTopBtn.addEventListener('click', scrollToTop);
@@ -166,11 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Hover effect for scroll to top button
     scrollTopBtn.addEventListener('mouseenter', () => {
-        scrollTopBtn.style.transform = 'translateY(-3px)';
+        scrollTopBtn.style.transform = 'translateY(-3px) scale(1.05)';
     });
     
     scrollTopBtn.addEventListener('mouseleave', () => {
-        scrollTopBtn.style.transform = 'translateY(0)';
+        scrollTopBtn.style.transform = 'translateY(0) scale(1)';
     });
 });
 
@@ -239,4 +297,14 @@ console.log(`
 💼 LinkedIn: https://www.linkedin.com/in/vasantha-kumar-s/
 
 Built with ❤️ using HTML, CSS, and JavaScript
+🌙 Features dark mode support
+✨ Modern UI with improved accessibility
 `);
+
+// Performance monitoring
+if ('performance' in window && 'measure' in window.performance) {
+    window.addEventListener('load', () => {
+        const loadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
+        console.log(`⚡ Page loaded in ${loadTime}ms`);
+    });
+}

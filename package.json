@@ -1,0 +1,37 @@
+{
+  "name": "vasanth-portfolio",
+  "version": "2.0.0",
+  "description": "Modern portfolio website with dark mode support",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint:html": "htmlhint index.html",
+    "lint:css": "stylelint styles.css",
+    "lint:js": "eslint script.js",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasantha-kumar-s/vasanth_here.git"
+  },
+  "keywords": [
+    "portfolio",
+    "dark-mode",
+    "responsive",
+    "accessibility",
+    "modern-ui"
+  ],
+  "author": "Vasantha Kumar S <vasanthakumarselvaraj04@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vasantha-kumar-s/vasanth_here/issues"
+  },
+  "homepage": "https://vasantha-kumar-s.github.io/vasanth_here/",
+  "devDependencies": {
+    "htmlhint": "^1.1.4",
+    "stylelint": "^16.1.0",
+    "stylelint-config-standard": "^36.0.0",
+    "eslint": "^8.56.0"
+  }
+}
